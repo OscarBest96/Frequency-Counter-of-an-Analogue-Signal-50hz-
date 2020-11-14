@@ -1,0 +1,1 @@
+This test is for the final version of the spi master

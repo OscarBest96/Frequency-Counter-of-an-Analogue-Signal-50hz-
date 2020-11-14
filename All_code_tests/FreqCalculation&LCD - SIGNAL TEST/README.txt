@@ -1,0 +1,1 @@
+This code initialises and uses the onboard ADC to verify that a 50Hz PWM signal is being produced.

@@ -1,0 +1,72 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity T_cycle_measurement is
+
+	generic (
+		DATA_WIDTH : natural := 16
+		
+	);
+
+	port (
+	   
+		RX    : in  std_logic_vector((DATA_WIDTH-1) downto 0)	  -- Received data
+      CLK 	: in   std_logic;		                             --FPGA Clock
+		RESET : in   std_logic;	                                --Async Reset
+		data tx : out std_logic_vector((DATA_WIDTH-1) downto 0);
+
+		
+	);
+
+end entity;
+
+architecture v1 of T_cycle_measurement is
+
+   signal RX_BUFFER : std_logic_vector(DATA_WIDTH -1 downto 0):= (others => '0'); --internal buffer created to store RX ADC data			
+   signal counter_up: std_logic_vector(DATA_WIDTH -1 downto 0):= (others => '0');
+
+	begin
+process( CLK, RESET, RX_BUFFER) is
+	
+	variable midpoint_count	:integer := (DATA_WIDTH -13);	--counters for transmitted and recieved data, cou
+   
+	
+begin
+
+	if (RESET ='0') then	
+	
+	  RX_BUFFER  <= (OTHERS => '0');		
+	  counter_up <= (OTHERS => '0');	-- resets all values to zero
+	  data tx    <= (OTHERS => '0');
+
+		elsif(rising_edge(CLK)) then 
+
+      RX_BUFFER <= RX;  
+		
+     
+	    if (RX_BUFFER((DATA_WIDTH-4) downto 0) = "111111000000") then 
+		
+	    midpoint_count = midpoint_count-1;
+		 counter_up <= counter_up + x"1";
+		 
+		 
+		   if((midpoint_count = not(DATA_WIDTH -13)) and (rising_edge(CLK))) then
+		  
+		    counter_up <= counter_up + x"1";
+		 
+	    
+		     elsif(midpoint_count = 0) then
+		 
+		      tx_data <= counter_up;
+	 
+	 
+	  else
+		
+	  RX_BUFFER <= (OTHERS => '0');
+			
+			
+		        
+
+end process;
+end v1;

@@ -1,0 +1,48 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.numeric_std.ALL;
+
+  
+entity CLK_DIV is
+
+port (
+
+SCLK:   in std_logic;
+reset:  in std_logic;
+
+SCLK_o: out std_logic
+
+);
+
+end CLK_DIV;
+
+architecture behaviour of CLK_DIV is
+
+signal count: integer   :=1;
+signal pulse: std_logic := '0';
+
+begin
+
+process(SLCK,reset)
+
+begin
+
+if(reset='1') then
+
+count<=1;
+pulse<='0';
+
+elsif(SCLK'event and SCLK='1') then
+count <=count+1;
+
+if (count = 40) then
+pulse <= NOT pulse;
+count <= 1;
+
+end if;
+end if;
+
+SCLK_o <= pulse;
+
+end process;
+end behaviour;

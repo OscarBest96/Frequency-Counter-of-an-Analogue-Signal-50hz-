@@ -1,0 +1,1 @@
+This code generates the 50Hz square wave signal, but also reads back the values through the MCU ADC (pin A0).
